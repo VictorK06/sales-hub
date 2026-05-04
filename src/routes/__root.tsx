@@ -1,6 +1,8 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
-
 import appCss from "../styles.css?url";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/sonner";
+import { useState } from "react";
 
 function NotFoundComponent() {
   return (
@@ -65,5 +67,58 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  const [qc] = useState(() => new QueryClient());
+  return (
+    <QueryClientProvider client={qc}>
+      <AppLayout />
+      <Toaster richColors position="top-right" />
+    </QueryClientProvider>
+  );
+}
+
+function AppLayout() {
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="border-b border-border bg-card/60 backdrop-blur sticky top-0 z-40">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2 group">
+            <div
+              className="h-9 w-9 rounded-lg shadow-[var(--shadow-elegant)]"
+              style={{ background: "var(--gradient-primary)" }}
+            />
+            <span className="font-serif text-xl tracking-tight text-foreground">
+              Vendora
+            </span>
+          </Link>
+          <nav className="flex items-center gap-1 text-sm">
+            <Link
+              to="/"
+              activeOptions={{ exact: true }}
+              activeProps={{ className: "bg-accent text-accent-foreground" }}
+              className="px-4 py-2 rounded-md text-muted-foreground hover:text-foreground transition"
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/products"
+              activeProps={{ className: "bg-accent text-accent-foreground" }}
+              className="px-4 py-2 rounded-md text-muted-foreground hover:text-foreground transition"
+            >
+              Products
+            </Link>
+            <Link
+              to="/sales"
+              activeProps={{ className: "bg-accent text-accent-foreground" }}
+              className="px-4 py-2 rounded-md text-muted-foreground hover:text-foreground transition"
+            >
+              Sales
+            </Link>
+          </nav>
+        </div>
+      </header>
+      <main className="max-w-6xl mx-auto px-6 py-10">
+        <Outlet />
+      </main>
+    </div>
+  );
 }
