@@ -29,16 +29,16 @@ export const Route = createFileRoute("/products")({
   component: ProductsPage,
   head: () => ({
     meta: [
-      { title: "Products — Vendora" },
-      { name: "description", content: "Manage your product catalog and stock." },
+      { title: "Produtos — Vendora" },
+      { name: "description", content: "Gerencie seu catálogo de produtos e estoque." },
     ],
   }),
 });
 
 const schema = z.object({
-  name: z.string().trim().min(1, "Name required").max(100),
-  price: z.number().min(0, "Price must be ≥ 0"),
-  stock: z.number().int("Whole number").min(0, "Stock must be ≥ 0"),
+  name: z.string().trim().min(1, "Nome obrigatório").max(100),
+  price: z.number().min(0, "Preço deve ser ≥ 0"),
+  stock: z.number().int("Número inteiro").min(0, "Estoque deve ser ≥ 0"),
 });
 
 function ProductsPage() {
@@ -51,7 +51,7 @@ function ProductsPage() {
     mutationFn: deleteProduct,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["products"] });
-      toast.success("Product deleted");
+      toast.success("Produto excluído");
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -60,8 +60,8 @@ function ProductsPage() {
     <div className="space-y-6">
       <div className="flex items-end justify-between">
         <div>
-          <h1 className="font-serif text-4xl tracking-tight">Products</h1>
-          <p className="text-muted-foreground mt-1">Your catalog and live stock.</p>
+          <h1 className="font-serif text-4xl tracking-tight">Produtos</h1>
+          <p className="text-muted-foreground mt-1">Seu catálogo e estoque em tempo real.</p>
         </div>
         <Dialog
           open={open}
@@ -75,7 +75,7 @@ function ProductsPage() {
               className="shadow-[var(--shadow-elegant)]"
               style={{ background: "var(--gradient-primary)", color: "var(--primary-foreground)" }}
             >
-              <Plus className="h-4 w-4 mr-1" /> New product
+              <Plus className="h-4 w-4 mr-1" /> Novo produto
             </Button>
           </DialogTrigger>
           <ProductDialog
@@ -90,19 +90,19 @@ function ProductsPage() {
 
       <Card className="shadow-[var(--shadow-card)] overflow-hidden">
         {isLoading ? (
-          <div className="p-8 text-muted-foreground">Loading…</div>
+          <div className="p-8 text-muted-foreground">Carregando…</div>
         ) : !data || data.length === 0 ? (
           <div className="p-12 text-center">
-            <p className="text-muted-foreground">No products yet.</p>
-            <p className="text-sm text-muted-foreground mt-1">Create your first one to start selling.</p>
+            <p className="text-muted-foreground">Nenhum produto ainda.</p>
+            <p className="text-sm text-muted-foreground mt-1">Crie o primeiro para começar a vender.</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead className="bg-secondary/60 text-secondary-foreground">
               <tr className="text-left">
-                <th className="px-5 py-3 font-medium">Name</th>
-                <th className="px-5 py-3 font-medium">Price</th>
-                <th className="px-5 py-3 font-medium">Stock</th>
+                <th className="px-5 py-3 font-medium">Nome</th>
+                <th className="px-5 py-3 font-medium">Preço</th>
+                <th className="px-5 py-3 font-medium">Estoque</th>
                 <th className="px-5 py-3"></th>
               </tr>
             </thead>
@@ -139,7 +139,7 @@ function ProductsPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => {
-                        if (confirm(`Delete ${p.name}?`)) del.mutate(p.id);
+                        if (confirm(`Excluir ${p.name}?`)) del.mutate(p.id);
                       }}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
@@ -173,7 +173,7 @@ function ProductDialog({ editing, onClose }: { editing: Product | null; onClose:
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["products"] });
-      toast.success(editing ? "Product updated" : "Product created");
+      toast.success(editing ? "Produto atualizado" : "Produto criado");
       onClose();
     },
     onError: (e: Error) => toast.error(e.message),
@@ -183,35 +183,35 @@ function ProductDialog({ editing, onClose }: { editing: Product | null; onClose:
     <DialogContent>
       <DialogHeader>
         <DialogTitle className="font-serif text-2xl">
-          {editing ? "Edit product" : "New product"}
+          {editing ? "Editar produto" : "Novo produto"}
         </DialogTitle>
       </DialogHeader>
       <div className="space-y-4">
         <div>
-          <Label htmlFor="name">Name</Label>
+          <Label htmlFor="name">Nome</Label>
           <Input id="name" value={name} onChange={(e) => setName(e.target.value)} maxLength={100} />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="price">Price</Label>
+            <Label htmlFor="price">Preço</Label>
             <Input id="price" type="number" step="0.01" min="0" value={price} onChange={(e) => setPrice(e.target.value)} />
           </div>
           <div>
-            <Label htmlFor="stock">Stock</Label>
+            <Label htmlFor="stock">Estoque</Label>
             <Input id="stock" type="number" min="0" value={stock} onChange={(e) => setStock(e.target.value)} />
           </div>
         </div>
       </div>
       <DialogFooter>
         <Button variant="ghost" onClick={onClose}>
-          Cancel
+          Cancelar
         </Button>
         <Button
           onClick={() => save.mutate()}
           disabled={save.isPending}
           style={{ background: "var(--gradient-primary)", color: "var(--primary-foreground)" }}
         >
-          {save.isPending ? "Saving…" : "Save"}
+          {save.isPending ? "Salvando…" : "Salvar"}
         </Button>
       </DialogFooter>
     </DialogContent>
