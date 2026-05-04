@@ -18,8 +18,8 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Dashboard — Vendora" },
-      { name: "description", content: "Overview of your sales and inventory." },
+      { title: "Painel — Vendora" },
+      { name: "description", content: "Visão geral das suas vendas e estoque." },
     ],
   }),
 });
@@ -35,7 +35,7 @@ function Index() {
   // 14-day chart
   const days = Array.from({ length: 14 }, (_, i) => startOfDay(subDays(new Date(), 13 - i)));
   const chartData = days.map((d) => {
-    const label = format(d, "MMM d");
+    const label = format(d, "dd/MM");
     const dayRevenue = (sales.data ?? [])
       .filter((s) => startOfDay(new Date(s.sold_at)).getTime() === d.getTime())
       .reduce((sum, s) => sum + Number(s.total), 0);
@@ -57,19 +57,19 @@ function Index() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-serif text-4xl text-foreground tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">A quiet view of your shop today.</p>
+        <h1 className="font-serif text-4xl text-foreground tracking-tight">Painel</h1>
+        <p className="text-muted-foreground mt-1">Uma visão tranquila da sua loja hoje.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={<TrendingUp className="h-5 w-5" />} label="Total revenue" value={formatMoney(totalRevenue)} highlight />
-        <StatCard icon={<Receipt className="h-5 w-5" />} label="Sales recorded" value={String(sales.data?.length ?? 0)} />
-        <StatCard icon={<Package className="h-5 w-5" />} label="Units sold" value={String(totalUnits)} />
-        <StatCard icon={<Boxes className="h-5 w-5" />} label="Items in stock" value={String(totalStock)} />
+        <StatCard icon={<TrendingUp className="h-5 w-5" />} label="Receita total" value={formatMoney(totalRevenue)} highlight />
+        <StatCard icon={<Receipt className="h-5 w-5" />} label="Vendas registradas" value={String(sales.data?.length ?? 0)} />
+        <StatCard icon={<Package className="h-5 w-5" />} label="Unidades vendidas" value={String(totalUnits)} />
+        <StatCard icon={<Boxes className="h-5 w-5" />} label="Itens em estoque" value={String(totalStock)} />
       </div>
 
       <Card className="p-6 shadow-[var(--shadow-card)]">
-        <h2 className="font-serif text-xl mb-4">Revenue · last 14 days</h2>
+        <h2 className="font-serif text-xl mb-4">Receita · últimos 14 dias</h2>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData}>
@@ -91,16 +91,16 @@ function Index() {
       </Card>
 
       <Card className="p-6 shadow-[var(--shadow-card)]">
-        <h2 className="font-serif text-xl mb-4">Top products</h2>
+        <h2 className="font-serif text-xl mb-4">Produtos mais vendidos</h2>
         {topProducts.length === 0 ? (
-          <p className="text-muted-foreground text-sm">No sales yet — register one to see your bestsellers.</p>
+          <p className="text-muted-foreground text-sm">Nenhuma venda ainda — registre uma para ver os mais vendidos.</p>
         ) : (
           <ul className="divide-y divide-border">
             {topProducts.map((p) => (
               <li key={p.name} className="py-3 flex justify-between items-center">
                 <div>
                   <div className="font-medium text-foreground">{p.name}</div>
-                  <div className="text-xs text-muted-foreground">{p.qty} units</div>
+                  <div className="text-xs text-muted-foreground">{p.qty} unidades</div>
                 </div>
                 <div className="font-mono text-sm text-foreground">{formatMoney(p.revenue)}</div>
               </li>

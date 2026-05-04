@@ -69,5 +69,5 @@ export async function deleteSale(id: string) {
 }
 
 export function formatMoney(n: number) {
-  return new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(n);
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
 }
